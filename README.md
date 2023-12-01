@@ -1,3 +1,3 @@
 # Using awslimitchecker
 
-A sample problem to use awslimitchecker to identify 
+A sample script to use awslimitchecker to identify services near their usage limit.
