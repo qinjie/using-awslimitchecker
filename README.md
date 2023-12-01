@@ -2,7 +2,15 @@
 
 A sample script to use awslimitchecker to identify services near their usage limit.
 
-Sample Output:
+### Note
+
+1. Include CloudTrail service will cause an error during execution. Need to exclude it in the script.
+
+```
+c.remove_services(['CloudTrail'])
+```
+
+### Sample Output
 
 ```
 Critical: ap-southeast-1
