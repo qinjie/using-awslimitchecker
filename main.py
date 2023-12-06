@@ -59,11 +59,13 @@ if __name__ == '__main__':
         if warnings:
             print(f'\nWarning: {region}')
             for item in warnings:
-                service,limit_name,usage,limit = item.split(',')
-                print(f'\t{service}: {limit_name} {usage} <= {limit}')
+                if len(item.split(','))==4:
+                    service,limit_name,usage,limit = item.split(',')
+                    print(f'\t{service}: {limit_name} {usage} <= {limit}')
 
         if criticals:
             print(f'\nCritical: {region}')
             for item in criticals:
-                service,limit_name,usage,limit = item.split(',')
-                print(f'\t{service}: {limit_name} {usage} <= {limit}')
+                if len(item.split(','))==4:
+                    service,limit_name,usage,limit = item.split(',')
+                    print(f'\t{service}: {limit_name} {usage} <= {limit}')
