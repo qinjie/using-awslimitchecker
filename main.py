@@ -9,12 +9,12 @@ from awslimitchecker.checker import AwsLimitChecker
 regions = ['ap-southeast-1', 'ap-northeast-1']
 
 # Override default thresholds which are 80 and 99 respectively
-WARNING_THRESHOLD = 20
+WARNING_THRESHOLD = 70
 CRITICAL_THRESHOLD = 85
 
 # Set custom threshold for some limits of some services
 service_limit_thresholds = [
-        dict(service_name='VPC', limit_name='NAT Gateways per AZ', warn_percent=None,warn_count=1, crit_percent=None, crit_count=3) 
+        dict(service_name='VPC', limit_name='NAT Gateways per AZ', warn_percent=None, warn_count=2, crit_percent=None, crit_count=3) 
     ]
 
 def check_limit_by_region(region: str)-> Tuple[List[str],List[str]]:
