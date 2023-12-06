@@ -1,6 +1,6 @@
 # Using awslimitchecker
 
-A sample script to use awslimitchecker to identify services near their usage limit.
+A sample script to use [awslimitchecker](https://github.com/jantman/awslimitchecker) to identify services near their usage limit.
 
 ### Note
 

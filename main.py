@@ -8,6 +8,15 @@ from awslimitchecker.checker import AwsLimitChecker
 
 regions = ['ap-southeast-1', 'ap-northeast-1']
 
+# Override default thresholds which are 80 and 99 respectively
+WARNING_THRESHOLD = 20
+CRITICAL_THRESHOLD = 85
+
+# Set custom threshold for some limits of some services
+service_limit_thresholds = [
+        dict(service_name='VPC', limit_name='NAT Gateways per AZ', warn_percent=None,warn_count=1, crit_percent=None, crit_count=3) 
+    ]
+
 def check_limit_by_region(region: str)-> Tuple[List[str],List[str]]:
     """
     Find the list of services which has reached warning or critical usage limit.
@@ -16,7 +25,16 @@ def check_limit_by_region(region: str)-> Tuple[List[str],List[str]]:
     Returns:
         A tuple contains warning list and critical list, where each item in the list is a comma-delimited value "service,limit_name,usage,limit".
     """
-    c = AwsLimitChecker(region=region)
+    c = AwsLimitChecker(region=region, 
+                        warning_threshold=WARNING_THRESHOLD, 
+                        critical_threshold=CRITICAL_THRESHOLD)
+
+    # print(c.services)
+    # print(c.get_limits(service=['VPC']))
+
+    # Set custom threshold for some services
+    for thresholds in service_limit_thresholds:
+        c.set_threshold_override(**thresholds)
 
     # Skip CloudTrail because it will cause an error
     c.remove_services(['CloudTrail'])
@@ -34,16 +52,18 @@ def check_limit_by_region(region: str)-> Tuple[List[str],List[str]]:
 
     return warnings, criticals
 
-for region in regions:
-    warnings,criticals = check_limit_by_region(region)
-    if warnings:
-        print(f'\nWarning: {region}')
-        for item in warnings:
-            service,limit_name,usage,limit = item.split(',')
-            print(f'\t{service}: {limit_name} {usage} <= {limit}')
 
-    if criticals:
-        print(f'\nCritical: {region}')
-        for item in criticals:
-            service,limit_name,usage,limit = item.split(',')
-            print(f'\t{service}: {limit_name} {usage} <= {limit}')
+if __name__ == '__main__':
+    for region in regions:
+        warnings,criticals = check_limit_by_region(region)
+        if warnings:
+            print(f'\nWarning: {region}')
+            for item in warnings:
+                service,limit_name,usage,limit = item.split(',')
+                print(f'\t{service}: {limit_name} {usage} <= {limit}')
+
+        if criticals:
+            print(f'\nCritical: {region}')
+            for item in criticals:
+                service,limit_name,usage,limit = item.split(',')
+                print(f'\t{service}: {limit_name} {usage} <= {limit}')
